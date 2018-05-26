@@ -6,27 +6,20 @@ var app = app || {};
     $('.nav-menu').slideToggle(350);
   })
 
-  function resetView() {
-    $('.container').hide();
-    $('.nav-menu').slideUp(350);
-  }
-
   const bookView = {};
 
   bookView.initIndexPage = function(ctx, next) {
-    resetView();
-    $('.book-view').show();
     $('#book-list').empty();
+    app.showOnly('.book-view');
     module.Book.all.forEach(book => $('#book-list').append(book.toHtml()));
-    next()
+    next();
   }
 
   bookView.initDetailPage = function(ctx, next) {
-    resetView();
-    $('.detail-view').show();
     $('.book-detail').empty();
-    let template = Handlebars.compile($('#book-detail-template').text());
-    $('.book-detail').append(template(ctx.book));
+    app.showOnly('.detail-view');
+    
+    $('.book-detail').append(app.render('book-detail-template', ctx.book));
 
     $('#update-btn').on('click', function() {
       page(`/books/${$(this).data('id')}/update`);
@@ -35,12 +28,12 @@ var app = app || {};
     $('#delete-btn').on('click', function() {
       module.Book.destroy($(this).data('id'));
     });
-    next()
+    next();
   }
 
   bookView.initCreateFormPage = function() {
-    resetView();
-    $('.create-view').show();
+    app.showOnly('.create-view');
+    
     $('#create-form').on('submit', function(event) {
       event.preventDefault();
 
@@ -57,8 +50,8 @@ var app = app || {};
   }
 
   bookView.initUpdateFormPage = function(ctx) {
-    resetView();
-    $('.update-view').show()
+    app.showOnly('.update-view');
+    
     $('#update-form input[name="title"]').val(ctx.book.title);
     $('#update-form input[name="author"]').val(ctx.book.author);
     $('#update-form input[name="isbn"]').val(ctx.book.isbn);
@@ -83,8 +76,8 @@ var app = app || {};
 
 // COMMENT: What is the purpose of this method?
   bookView.initSearchFormPage = function() {
-    resetView();
-    $('.search-view').show();
+    app.showOnly('.search-view');
+
     $('#search-form').on('submit', function(event) {
       // COMMENT: What default behavior is being prevented here?
       event.preventDefault();
@@ -107,8 +100,7 @@ var app = app || {};
 
   // COMMENT: What is the purpose of this method?
   bookView.initSearchResultsPage = function() {
-    resetView();
-    $('.search-results').show();
+    app.showOnly('.search-results');
     $('#search-list').empty();
 
     // COMMENT: Explain how the .forEach() method is being used below.
