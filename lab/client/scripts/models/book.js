@@ -5,9 +5,10 @@ var app = app || {};
 const ENV = {};
 
 ENV.isProduction = window.location.protocol === 'https:';
-ENV.productionApiUrl = 'insert cloud API server URL here';
-ENV.developmentApiUrl = 'insert local API server URL here';
+ENV.productionApiUrl = 'https://ta-booklist.herokuapp.com:3000';
+ENV.developmentApiUrl = 'http://localhost:3000';
 ENV.apiUrl = ENV.isProduction ? ENV.productionApiUrl : ENV.developmentApiUrl;
+app.ENV = ENV;
 
 (function(module) {
   function errorCallback(err) {
@@ -25,7 +26,14 @@ ENV.apiUrl = ENV.isProduction ? ENV.productionApiUrl : ENV.developmentApiUrl;
   }
 
   Book.all = [];
-  Book.loadAll = rows => Book.all = rows.sort((a, b) => b.title - a.title).map(book => new Book(book));
+  // I replaced the sort callback because it doesn't work on strings (a.title - b.title that is). This does, with the added benefit of ignoring leading "the" and also ignoring case.  No charge. ;)
+  Book.loadAll = rows => Book.all = rows.sort((a, b) => {
+    let titleA = a.title.toUpperCase().replace(/^THE[ ]*(.*)/,'$1');
+    let titleB = b.title.toUpperCase().replace(/^THE[ ]*(.*)/,'$1');
+    if (titleA < titleB) { return -1; }
+    if (titleA > titleB) { return 1; }
+    return 0;
+  }).map(book => new Book(book));
   Book.fetchAll = callback =>
     $.get(`${ENV.apiUrl}/api/v1/books`)
       .then(Book.loadAll)
@@ -61,6 +69,7 @@ ENV.apiUrl = ENV.isProduction ? ENV.productionApiUrl : ENV.developmentApiUrl;
     .catch(errorCallback)
 
   // COMMENT: Where is this method invoked? What is passed in as the 'book' argument when invoked? What callback will be invoked after Book.loadAll is invoked?
+  // ANSWER: it's called from bookView.initSearchFormPage. The book object holds the three search fields available to the user (title, author or isbn). It's passed bookView.initSearchResultsPage as the callback which shows the search results after they come back from the server.
   Book.find = (book, callback) =>
     $.get(`${ENV.apiUrl}/api/v1/books/find`, book)
       .then(Book.loadAll)
@@ -68,6 +77,7 @@ ENV.apiUrl = ENV.isProduction ? ENV.productionApiUrl : ENV.developmentApiUrl;
       .catch(errorCallback)
 
   // COMMENT: Where is this method invoked? How does it differ from the Book.find method, above?
+  // ANSWER: It's call from bookView.initSearchResultsPage within the forEach call back function.
   Book.findOne = isbn =>
     $.get(`${ENV.apiUrl}/api/v1/books/find/${isbn}`)
     .then(Book.create)

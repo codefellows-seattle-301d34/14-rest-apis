@@ -2,12 +2,13 @@
 
 var app = app || {};
 
-const ENV = {};
+// I commented out these lines because they were also included in book.js and 'use strict' was complaining.
+// const ENV = {};
 
-ENV.isProduction = window.location.protocol === 'https:';
-ENV.productionApiUrl = 'insert cloud API server URL here';
-ENV.developmentApiUrl = 'insert local API server URL here';
-ENV.apiUrl = ENV.isProduction ? ENV.productionApiUrl : ENV.developmentApiUrl;
+// ENV.isProduction = window.location.protocol === 'https:';
+// ENV.productionApiUrl = 'https://ta-booklist.herokuapp.com:3000';
+// ENV.developmentApiUrl = 'http://localhost:3000';
+// ENV.apiUrl = ENV.isProduction ? ENV.productionApiUrl : ENV.developmentApiUrl;
 
 (function (module) {
   const adminView = {};
@@ -21,9 +22,11 @@ ENV.apiUrl = ENV.isProduction ? ENV.productionApiUrl : ENV.developmentApiUrl;
       let token = event.target.passphrase.value;
 
       // COMMENT: Is the token cleared out of local storage? Do you agree or disagree with this structure?
-      $.get(`${ENV.apiUrl}/api/v1/admin`, {token})
+      // ANSWER: No it's not. It should be, either on initial page load (or reload, IMO). Also, this code sets localStorage.token to true regardless of what's returned by the $.get call.  THAT call was broken too (both tokens were strings so parseInt'ing one resulted in false being returned all the time). I fixed that but the logged in state still persists between sessions.
+      localStorage.clear();
+      $.get(`${app.ENV.apiUrl}/api/v1/admin`, {token})
         .then(res => {
-          localStorage.token = true;
+          if (res === true) localStorage.token = true;
           page('/');
         })
         .catch(() => page('/'));
