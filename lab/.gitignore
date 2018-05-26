@@ -1,5 +1,6 @@
 # User defined
 .DS_Store
+LAB.md
 *.diff
 
 # Logs
