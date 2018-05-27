@@ -42,7 +42,7 @@ app.get('/api/v1/books/find', (req, res) => {
 
   //TODO:
   // COMMENT: What is superagent? How is it being used here? What other libraries are available that could be used for the same purpose?
-  //superagent is being used here instead of express (we would say app.get is using express). Superagent is a ajax API.
+  //Superagent is a ajax API (that's from the docs) but as I understand it, it makes getting data from APIs much easier to do.
   superagent.get(url)
     .query({'q': query})
     .query({'key': API_KEY})
@@ -71,8 +71,8 @@ app.get('/api/v1/books/find', (req, res) => {
     .catch(console.error)
 })
 
-//TODO:
 // COMMENT: How does this route differ from the route above? What does ':isbn' refer to in the code below?
+//This differs from the route above by listening specifically for a route that includes an isbn number. This will point to a specific book instead of many books. ':isbn' is the reference for an idividual book since isbn is a unique number to that work.
 app.get('/api/v1/books/find/:isbn', (req, res) => {
   let url = 'https://www.googleapis.com/books/v1/volumes';
   superagent.get(url)
