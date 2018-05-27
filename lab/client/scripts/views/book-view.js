@@ -75,14 +75,17 @@ var app = app || {};
   };
 
 // COMMENT: What is the purpose of this method?
+// renders the search form when the search nav is clicked.
   bookView.initSearchFormPage = function() {
     app.showOnly('.search-view');
 
     $('#search-form').on('submit', function(event) {
       // COMMENT: What default behavior is being prevented here?
+      //submit refreshes the page and prevents that
       event.preventDefault();
 
       // COMMENT: What is the event.target, below? What will happen if the user does not provide the information needed for the title, author, or isbn properties?
+      // Grabs the value that the user inputted in the input, event.target is the one that the inputted into and if the other inputs were empty, it becomes a empty string.
       let book = {
         title: event.target.title.value || '',
         author: event.target.author.value || '',
@@ -92,6 +95,7 @@ var app = app || {};
       module.Book.find(book, bookView.initSearchResultsPage);
 
       // COMMENT: Why are these values set to an empty string?
+      // So that the form 'refreshes' and all the inputable form is empty again.
       event.target.title.value = '';
       event.target.author.value = '';
       event.target.isbn.value = '';
@@ -99,15 +103,18 @@ var app = app || {};
   }
 
   // COMMENT: What is the purpose of this method?
+  // renders the results of the search on the page. 
   bookView.initSearchResultsPage = function() {
     app.showOnly('.search-results');
     $('#search-list').empty();
 
     // COMMENT: Explain how the .forEach() method is being used below.
+    // taking each book and passing it through the handlebar and appending it on page. 
     module.Book.all.forEach(book => $('#search-list').append(book.toHtml()));
     $('.detail-button a').text('Add to list').attr('href', '/');
     $('.detail-button').on('click', function(e) {
       // COMMENT: Explain the following line of code.
+      // the great-grandparent of detail-button can be found in the handlebar in the html. it is the data-bookid attritbute with the book_id as its data. This book_id becomes the parameter for findOne which is in book.js. It goes and gets the book with the same thing you pass it, in this case the id, then posts that book into the DB and sends you back to the main page.
       module.Book.findOne($(this).parent().parent().parent().data('bookid'))
     });
   }

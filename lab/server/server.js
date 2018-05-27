@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // Application dependencies
 const express = require('express');
@@ -12,6 +12,7 @@ const PORT = process.env.PORT;
 const TOKEN = process.env.TOKEN;
 
 // COMMENT: Explain the following line of code. What is the API_KEY? Where did it come from?
+// Look for the GOOGLE_API_KEY in the env of your terminal shell. Store that as API_KEY. API keys are ways to access APIs. They are kinda like identifies to let the API know we are good developers and not trying to ruin their services. We got ours from Google
 const API_KEY = process.env.GOOGLE_API_KEY;
 
 // Database Setup
@@ -28,25 +29,28 @@ app.get('/api/v1/admin', (req, res) => res.send(TOKEN === parseInt(req.query.tok
 app.get('/api/v1/books/find', (req, res) => {
   let url = 'https://www.googleapis.com/books/v1/volumes';
 
-  // COMMENT: Explain the following four lines of code. How is the query built out? What information will be used to create the query?
+  // COMMENT: Explain the following four lines of code. How is the query built out? What information will be used to create the query? At first the query is empty. However, if the request.query has any of the title, author, isbn key, and a value attached to it, its value will be added on as a stringified key-value relationship. request.query is an object after parsed. This information will become the value of the key q.
   let query = ''
   if(req.query.title) query += `+intitle:${req.query.title}`;
   if(req.query.author) query += `+inauthor:${req.query.author}`;
   if(req.query.isbn) query += `+isbn:${req.query.isbn}`;
 
-  // COMMENT: What is superagent? How is it being used here? What other libraries are available that could be used for the same purpose?
+  // COMMENT: What is superagent? How is it being used here? What other libraries are available that could be used for the same purpose? superagent is a ajax API used to keep the API_KEY hidden and not in out code. Some similar ones I googled were fetch API, Axios API
   superagent.get(url)
     .query({'q': query})
     .query({'key': API_KEY})
     .then(response => response.body.items.map((book, idx) => {
 
       // COMMENT: The line below is an example of destructuring. Explain destructuring in your own words.
+      // We are destructuring the book.volumeInfo into each of the relating keys in the object. We are coping the values in the book.volumeInfo into a onject where the key is the same.
       let { title, authors, industryIdentifiers, imageLinks, description } = book.volumeInfo;
 
       // COMMENT: What is the purpose of the following placeholder image?
+      // if the book we searched for does not have an img, we can show this placeholder.
       let placeholderImage = 'http://www.newyorkpaddy.com/images/covers/NoCoverAvailable.jpg';
 
       // COMMENT: Explain how ternary operators are being used below.
+      // if each of the keys do not have a value, we assign the string or variable after the colon. If they exist we pass whatever it was. 
       return {
         title: title ? title : 'No title available',
         author: authors ? authors[0] : 'No authors available',
@@ -61,6 +65,7 @@ app.get('/api/v1/books/find', (req, res) => {
 })
 
 // COMMENT: How does this route differ from the route above? What does ':isbn' refer to in the code below?
+// This route differs because we are finding a specific book by its isbn. The :isbn is just a variable and could be anything. 
 app.get('/api/v1/books/find/:isbn', (req, res) => {
   let url = 'https://www.googleapis.com/books/v1/volumes';
   superagent.get(url)
