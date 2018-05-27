@@ -6,14 +6,7 @@ Complete [today's Kata](https://www.codewars.com/kata/indexed-capitalization) an
 
 ## Lab 14 Submission Instructions
 
-- Continue working in the same repository from the previous class
-- Check out a new branch for today's lab assignment, semantically named `rest-api` or something similar. It should include all of the completed code from the previous assignment.
-- Complete your **Feature Tasks for the day**
-- Create a Pull Request back to `master`
-- On Canvas, submit a link to your PR and a link to your deployed application on Heroku. **Make sure to include the following:**
-  - A question within the context of today's lab assignment
-  - An observation about the lab assignment, or related 'Ah-hah!' moment
-  - How long you spent working on this assignment
+- This lab contains the full solution code for the book app and `COMMENT` tasks to complete. Read through these tasks and fill in your responses. The user stories and feature tasks are included below for your reference, but there are no additional features to build out.
 
 ## Resources
 
@@ -31,7 +24,6 @@ Complete [today's Kata](https://www.codewars.com/kata/indexed-capitalization) an
 
 ```
 export PORT=3000
-export CLIENT_URL=http://localhost:8080
 export TOKEN=1234 # Please make your own PIN
 export GOOGLE_API_KEY=your google books api key
 Mac:     export DATABASE_URL=postgres://localhost:5432/books_app
@@ -41,38 +33,39 @@ Windows: export DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/books_app
 ```sh
 book_app_week_3/
 ├── book-list-client
-│   ├── data
-│   │   └── books.json
+│   ├── data
+│   │   └── books.json
 |   ├── .eslintrc.json
 |   ├── .gitignore
 │   ├── index.html
 |   ├── README.md
-│   ├── scripts
-│   │   ├── models
-│   │   │   └── book.js
-│   │   └── views
-│   │       ├── admin-view.js
-│   │       ├── book-view.js
-│   │       ├── error-view.js
-│   │       └── routes.js
-│   └── styles
-│       ├── base.css
-│       ├── fonts
-│       │   ├── icomoon.eot
-│       │   ├── icomoon.svg
-│       │   ├── icomoon.ttf
-│       │   └── icomoon.woff
-│       ├── icons.css
-│       ├── layout.css
-│       ├── modules
-│       │   ├── admin-main.css
-│       │   ├── book-main.css
-│       │   ├── detail-main.css
-│       │   ├── error.css
-│       │   ├── footer.css
-│       │   ├── form-main.css
-│       │   └── header.css
-│       └── reset.css
+│   ├── scripts
+│   │   ├── models
+│   │   │   └── book.js
+│   │   ├── views
+│   │   |   ├── admin-view.js
+│   │   |   ├── book-view.js
+│   │   |   ├── error-view.js
+│   │   |   └── routes.js
+|   |   └── index.js
+│   └── styles
+│       ├── base.css
+│       ├── fonts
+│       │   ├── icomoon.eot
+│       │   ├── icomoon.svg
+│       │   ├── icomoon.ttf
+│       │   └── icomoon.woff
+│       ├── icons.css
+│       ├── layout.css
+│       ├── modules
+│       │   ├── admin-main.css
+│       │   ├── book-main.css
+│       │   ├── detail-main.css
+│       │   ├── error.css
+│       │   ├── footer.css
+│       │   ├── form-main.css
+│       │   └── header.css
+│       └── reset.css
 └── book-list-server
   ├── .eslintrc.json
   ├── .gitignore

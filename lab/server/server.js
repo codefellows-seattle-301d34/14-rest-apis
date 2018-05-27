@@ -9,7 +9,6 @@ const superagent = require('superagent');
 // Application Setup
 const app = express();
 const PORT = process.env.PORT;
-const CLIENT_URL = process.env.CLIENT_URL;
 const TOKEN = process.env.TOKEN;
 
 // COMMENT: Explain the following line of code. What is the API_KEY? Where did it come from?
@@ -84,44 +83,52 @@ app.get('/api/v1/books/find/:isbn', (req, res) => {
 })
 
 app.get('/api/v1/books', (req, res) => {
-  client.query(`SELECT book_id, title, author, image_url, isbn FROM books;`)
+  let SQL = 'SELECT book_id, title, author, image_url, isbn FROM books;';
+  client.query(SQL)
     .then(results => res.send(results.rows))
     .catch(console.error);
 });
 
 app.get('/api/v1/books/:id', (req, res) => {
-  client.query(`SELECT * FROM books WHERE book_id=${req.params.id}`)
+  let SQL = 'SELECT * FROM books WHERE book_id=$1';
+  let values = [req.params.id];
+  
+  client.query(SQL, values)
     .then(results => res.send(results.rows))
     .catch(console.error);
 });
 
 app.post('/api/v1/books', express.urlencoded(), (req, res) => {
   let {title, author, isbn, image_url, description} = req.body;
-  client.query(`
-    INSERT INTO books(title, author, isbn, image_url, description) VALUES($1, $2, $3, $4, $5)`,
-    [title, author, isbn, image_url, description]
-  )
-  .then(results => res.sendStatus(201))
-  .catch(console.error);
+  
+  let SQL = 'INSERT INTO books(title, author, isbn, image_url, description) VALUES($1, $2, $3, $4, $5);';
+  let values = [title, author, isbn, image_url, description];
+  
+  client.query(SQL, values)
+    .then(() => res.sendStatus(201))
+    .catch(console.error);
 });
 
 app.put('/api/v1/books/:id', express.urlencoded(), (req, res) => {
   let {title, author, isbn, image_url, description} = req.body;
-  client.query(`
-    UPDATE books
-    SET title=$1, author=$2, isbn=$3, image_url=$4, description=$5
-    WHERE book_id=$6`,
-    [title, author, isbn, image_url, description, req.params.id]
-  )
-  .then(() => res.sendStatus(204))
-  .catch(console.error)
+  
+  let SQL = 'UPDATE books SET title=$1, author=$2, isbn=$3, image_url=$4, description=$5 WHERE book_id=$6;';
+  let values = [title, author, isbn, image_url, description, req.params.id];
+  
+  client.query(SQL, values)
+    .then(() => res.sendStatus(204))
+    .catch(console.error)
 })
 
 app.delete('/api/v1/books/:id', (req, res) => {
-  client.query('DELETE FROM books WHERE book_id=$1', [req.params.id])
-  .then(() => res.sendStatus(204))
-  .catch(console.error);
+  let SQL = 'DELETE FROM books WHERE book_id=$1;';
+  let values = [req.params.id];
+  
+  client.query(SQL, values)
+    .then(() => res.sendStatus(204))
+    .catch(console.error);
 });
 
-app.get('*', (req, res) => res.redirect(CLIENT_URL));
+app.get('*', (req, res) => res.status(403).send('This route does not exist'));
+
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
