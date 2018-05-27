@@ -12,7 +12,8 @@ var app = app || {};
       event.preventDefault();
       let token = event.target.passphrase.value;
 
-      // COMMENT: Is the token cleared out of local storage? Do you agree or disagree with this structure?
+      // DONE: Is the token cleared out of local storage? Do you agree or disagree with this structure?
+      // This token is set to be a boolean in local storage. It is not removed. This is undesierable because any user who is familiar with using the console can simply change it's value.
       $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/admin`, {token})
         .then(res => {
           if(res) {
