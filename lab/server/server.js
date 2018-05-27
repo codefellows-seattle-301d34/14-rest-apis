@@ -40,7 +40,6 @@ app.get('/api/v1/books/find', (req, res) => {
   if(req.query.isbn) query += `+isbn:${req.query.isbn}`;
   //If req.query.isbn is a thing, then add to that empty string the items in the template literal.
 
-  //TODO:
   // COMMENT: What is superagent? How is it being used here? What other libraries are available that could be used for the same purpose?
   //Superagent is a ajax API (that's from the docs) but as I understand it, it makes getting data from APIs much easier to do.
   superagent.get(url)
