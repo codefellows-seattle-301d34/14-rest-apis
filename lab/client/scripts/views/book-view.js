@@ -75,14 +75,17 @@ var app = app || {};
   };
 
 // COMMENT: What is the purpose of this method?
+//  This shows only the search form until the user clicks submit, and then it searches the database for the information the user gave. 
   bookView.initSearchFormPage = function() {
     app.showOnly('.search-view');
 
     $('#search-form').on('submit', function(event) {
       // COMMENT: What default behavior is being prevented here?
+      //stops the page from refreshing on 'submit'
       event.preventDefault();
 
       // COMMENT: What is the event.target, below? What will happen if the user does not provide the information needed for the title, author, or isbn properties?
+      //takes the value that the user entered in input. //event.target is what was inputted into and if the any inputs are empty, it becomes a empty string.
       let book = {
         title: event.target.title.value || '',
         author: event.target.author.value || '',
@@ -92,6 +95,7 @@ var app = app || {};
       module.Book.find(book, bookView.initSearchResultsPage);
 
       // COMMENT: Why are these values set to an empty string?
+      //it clears the form for the next search. 
       event.target.title.value = '';
       event.target.author.value = '';
       event.target.isbn.value = '';
@@ -99,15 +103,18 @@ var app = app || {};
   }
 
   // COMMENT: What is the purpose of this method?
+  //renders the results of the search on the page
   bookView.initSearchResultsPage = function() {
     app.showOnly('.search-results');
     $('#search-list').empty();
 
     // COMMENT: Explain how the .forEach() method is being used below.
+    //this takes each book and passes it through the handlebar templates to be able to append it on the page
     module.Book.all.forEach(book => $('#search-list').append(book.toHtml()));
     $('.detail-button a').text('Add to list').attr('href', '/');
     $('.detail-button').on('click', function(e) {
       // COMMENT: Explain the following line of code.
+      //This is traversing the DOM so it can get the data for the book_id in the handlebars template for detail-button -> the data-bookid attritbute with the book_id as its data (which is the parameter for the next function, findOne. I think the idea is to post that book into the database.
       module.Book.findOne($(this).parent().parent().parent().data('bookid'))
     });
   }

@@ -13,6 +13,7 @@ var app = app || {};
       let token = event.target.passphrase.value;
 
       // COMMENT: Is the token cleared out of local storage? Do you agree or disagree with this structure?
+      // it looks like the token gets stored in the local storage and doesn't get taken out. If someone were to get in the admin they could find this in local storage which is bad. 
       $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/admin`, {token})
         .then(res => {
           if(res) {
