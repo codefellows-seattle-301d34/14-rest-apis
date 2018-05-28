@@ -13,7 +13,8 @@ var app = app || {};
   }
 
   Book.prototype.toHtml = function() {
-    return app.render('book-list-temmplate', this);
+    console.log(this);
+    return app.render('book-list-template', this);
   }
 
   Book.all = [];
@@ -55,6 +56,7 @@ var app = app || {};
       .catch(errorCallback)
 
   // COMMENT: Where is this method invoked? What is passed in as the 'book' argument when invoked? What callback will be invoked after Book.loadAll is invoked?
+  // This method is invoked on submit of #search-form (within the event handler in bookView.initSearchFormPage function). The book argument gathers the value from te form, and initializes bookView.initSearchResultsPage in its callback in the second argument.
   Book.find = (book, callback) =>
     $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/books/find`, book)
       .then(Book.loadAll)
@@ -62,6 +64,7 @@ var app = app || {};
       .catch(errorCallback)
 
   // COMMENT: Where is this method invoked? How does it differ from the Book.find method, above?
+  // This is invoked when .detail-button is clicked. This function only passes in the id one one book, and uses that isbn to query within the Google APIs.
   Book.findOne = isbn =>
     $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/books/find/${isbn}`)
       .then(Book.create)
