@@ -12,7 +12,9 @@ var app = app || {};
       event.preventDefault();
       let token = event.target.passphrase.value;
 
-      // COMMENT: Is the token cleared out of local storage? Do you agree or disagree with this structure?
+      // DONE:
+      // Is the token cleared out of local storage? The token is not saved to local storage, only the boolean to indicate whether or not the token is a match.
+      // Do you agree or disagree with this structure? It still seems poor, becuase a naughty user can manipulate their own local storage to bypass the security.
       $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/admin`, {token})
         .then(res => {
           if(res) {

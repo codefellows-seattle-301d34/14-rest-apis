@@ -74,15 +74,19 @@ var app = app || {};
     })
   };
 
-// COMMENT: What is the purpose of this method?
+  // DONE:
+  // What is the purpose of this method? It initializes the serach form page.
   bookView.initSearchFormPage = function() {
     app.showOnly('.search-view');
 
     $('#search-form').on('submit', function(event) {
-      // COMMENT: What default behavior is being prevented here?
+      // DONE:
+      // What default behavior is being prevented here? Refreshing of the page is the big one that is annoying.
       event.preventDefault();
 
-      // COMMENT: What is the event.target, below? What will happen if the user does not provide the information needed for the title, author, or isbn properties?
+      // DONE:
+      // What is the event.target, below? the form element
+      // What will happen if the user does not provide the information needed for the title, author, or isbn properties? they will be set to empty strings.
       let book = {
         title: event.target.title.value || '',
         author: event.target.author.value || '',
@@ -91,23 +95,27 @@ var app = app || {};
 
       module.Book.find(book, bookView.initSearchResultsPage);
 
-      // COMMENT: Why are these values set to an empty string?
+      // DONE:
+      // Why are these values set to an empty string? It is way of resetting the form.
       event.target.title.value = '';
       event.target.author.value = '';
       event.target.isbn.value = '';
     })
   }
 
-  // COMMENT: What is the purpose of this method?
+  // DONE:
+  // What is the purpose of this method? it initializes the serach results page
   bookView.initSearchResultsPage = function() {
     app.showOnly('.search-results');
     $('#search-list').empty();
 
-    // COMMENT: Explain how the .forEach() method is being used below.
+    // DONE:
+    // Explain how the .forEach() method is being used below. It is iterating over each book in the app.Book.all array and setting up event listeners for the detail button, and a href for the detail button anchor tags.
     module.Book.all.forEach(book => $('#search-list').append(book.toHtml()));
     $('.detail-button a').text('Add to list').attr('href', '/');
     $('.detail-button').on('click', function(e) {
-      // COMMENT: Explain the following line of code.
+      // DONE:
+      // Explain the following line of code. It traverses up the dom several layers, finds the data-bookid value, and uses it to call the app.Book.findOne method.
       module.Book.findOne($(this).parent().parent().parent().data('bookid'))
     });
   }

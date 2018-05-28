@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // Application dependencies
 const express = require('express');
