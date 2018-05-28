@@ -75,14 +75,19 @@ var app = app || {};
   };
 
 // COMMENT: What is the purpose of this method?
+// Activates search form when clicked
   bookView.initSearchFormPage = function() {
     app.showOnly('.search-view');
 
     $('#search-form').on('submit', function(event) {
       // COMMENT: What default behavior is being prevented here?
+      // Refreshes page with empty form using preventDefault
       event.preventDefault();
 
       // COMMENT: What is the event.target, below? What will happen if the user does not provide the information needed for the title, author, or isbn properties?
+    //  Takes what the user iputs and puts them in correct field, if not provided will give an empty string
+      let book = {
+        title: event.target.title.value || '',
       let book = {
         title: event.target.title.value || '',
         author: event.target.author.value || '',
@@ -92,6 +97,7 @@ var app = app || {};
       module.Book.find(book, bookView.initSearchResultsPage);
 
       // COMMENT: Why are these values set to an empty string?
+      // Refreshes page and form
       event.target.title.value = '';
       event.target.author.value = '';
       event.target.isbn.value = '';
@@ -99,11 +105,13 @@ var app = app || {};
   }
 
   // COMMENT: What is the purpose of this method?
+  // Shows whats enters on results page
   bookView.initSearchResultsPage = function() {
     app.showOnly('.search-results');
     $('#search-list').empty();
 
     // COMMENT: Explain how the .forEach() method is being used below.
+    // Takes books and appends to page
     module.Book.all.forEach(book => $('#search-list').append(book.toHtml()));
     $('.detail-button a').text('Add to list').attr('href', '/');
     $('.detail-button').on('click', function(e) {
