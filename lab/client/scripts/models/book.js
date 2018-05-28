@@ -55,6 +55,7 @@ var app = app || {};
       .catch(errorCallback)
 
   // COMMENT: Where is this method invoked? What is passed in as the 'book' argument when invoked? What callback will be invoked after Book.loadAll is invoked?
+  //This method is invoked in book-view.js as part of the bookView.initSearchResultsPage method. The 'book' argument is what is found in the database and returned as an object from what was entered into the search form. The callback that will be invoked is the bookView.initSearchResultsPage.
   Book.find = (book, callback) =>
     $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/books/find`, book)
       .then(Book.loadAll)
@@ -62,6 +63,7 @@ var app = app || {};
       .catch(errorCallback)
 
   // COMMENT: Where is this method invoked? How does it differ from the Book.find method, above?
+  //This is invoked in book-view.js inside the initSearchResultsPage method- when the user clicks on the more detail for a single book in searchResult page; gets the book with the same id as the one that was clicked and stores it in the database.
   Book.findOne = isbn =>
     $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/books/find/${isbn}`)
       .then(Book.create)
