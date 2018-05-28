@@ -11,7 +11,9 @@ const app = express();
 const PORT = process.env.PORT;
 const TOKEN = process.env.TOKEN;
 
-// COMMENT: Explain the following line of code. What is the API_KEY? Where did it come from?
+// DONE:
+// Explain the following line of code. It declares a variable, and assigns its value to the value present in the environment variables.
+// What is the API_KEY? Where did it come from? It is a key that comes from google, that give you access to their book api.
 const API_KEY = process.env.GOOGLE_API_KEY;
 
 // Database Setup
@@ -28,25 +30,34 @@ app.get('/api/v1/admin', (req, res) => res.send(TOKEN === parseInt(req.query.tok
 app.get('/api/v1/books/find', (req, res) => {
   let url = 'https://www.googleapis.com/books/v1/volumes';
 
-  // COMMENT: Explain the following four lines of code. How is the query built out? What information will be used to create the query?
+  // DONE:
+  // Explain the following four lines of code. it builds up the query string that will ultimately get passed to the google books api via superagent
+  // How is the query built out? for each of the three parameters (title, author, isbn), if they exist, the relevent part of the query string is added to the query variable.
+  // What information will be used to create the query? the information from the http request, specifically the title and/or author and/or isbn.
   let query = ''
   if(req.query.title) query += `+intitle:${req.query.title}`;
   if(req.query.author) query += `+inauthor:${req.query.author}`;
   if(req.query.isbn) query += `+isbn:${req.query.isbn}`;
 
-  // COMMENT: What is superagent? How is it being used here? What other libraries are available that could be used for the same purpose?
+  // DONE:
+  // What is superagent? It is a node package that lets you easily add values to the header (like api tokens) when you make an ajax resuest.
+  // How is it being used here? It is attaching the properties q (query string) and key (api key) to http request
+  // What other libraries are available that could be used for the same purpose? Fetch API, Axios, Request, My Take.
   superagent.get(url)
     .query({'q': query})
     .query({'key': API_KEY})
     .then(response => response.body.items.map((book, idx) => {
 
-      // COMMENT: The line below is an example of destructuring. Explain destructuring in your own words.
+      // DONE:
+      // The line below is an example of destructuring. Explain destructuring in your own words. Destructuring is a shorthand way to extract the information from an object literal or array.
       let { title, authors, industryIdentifiers, imageLinks, description } = book.volumeInfo;
 
-      // COMMENT: What is the purpose of the following placeholder image?
+      // DONE: 
+      // What is the purpose of the following placeholder image? It is a placeholder image, that will display when the desired image is unavailable.
       let placeholderImage = 'http://www.newyorkpaddy.com/images/covers/NoCoverAvailable.jpg';
 
-      // COMMENT: Explain how ternary operators are being used below.
+      // DONE: Explain how ternary operators are being used below.
+      // They are bein gused to check the value of the existing properties. If they exist, they are used. If not, they are replaced with text to indicate that they are unavailable.
       return {
         title: title ? title : 'No title available',
         author: authors ? authors[0] : 'No authors available',
@@ -60,7 +71,9 @@ app.get('/api/v1/books/find', (req, res) => {
     .catch(console.error)
 })
 
-// COMMENT: How does this route differ from the route above? What does ':isbn' refer to in the code below?
+// DONE:
+// How does this route differ from the route above? This route does not interact with the google bookx api. It gets data from this app's own backend.
+// What does ':isbn' refer to in the code below? The colon indicates that the value supplied is a parameter, and isbn will be the parameter's name.
 app.get('/api/v1/books/find/:isbn', (req, res) => {
   let url = 'https://www.googleapis.com/books/v1/volumes';
   superagent.get(url)
