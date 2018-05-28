@@ -2,35 +2,36 @@
 
 var app = app || {};
 
-(function (module) {
+( function ( module ) {
   const adminView = {};
 
-  adminView.initAdminPage = function (ctx, next) {
-    app.showOnly('.admin-view');
+  adminView.initAdminPage = function ( ctx, next ) {
+    app.showOnly( '.admin-view' );
 
-    $('#admin-form').on('submit', function(event) {
+    $( '#admin-form' ).on( 'submit', function ( event ) {
       event.preventDefault();
       let token = event.target.passphrase.value;
 
       // COMMENT: Is the token cleared out of local storage? Do you agree or disagree with this structure?
-      $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/admin`, {token})
-        .then(res => {
-          if(res) {
+      // It doesn't look like the token is cleared out of localStorage. If not, I suppose this could lead to potential security risks in the future, but it is more convenient for the user.
+      $.get( `${ app.ENVIRONMENT.apiUrl }/api/v1/admin`, { token } )
+        .then( res => {
+          if ( res ) {
             localStorage.token = true;
-            page('/');
+            page( '/' );
           } else {
-            console.error('Invalid Login.');
+            console.error( 'Invalid Login.' );
           }
-        })
-        .catch(() => page('/'));
-    })
+        } )
+        .catch( () => page( '/' ) );
+    } )
   };
 
-  adminView.verify = function(ctx, next) {
-    if(!localStorage.token) $('.admin').addClass('admin-only');
-    else $('.admin').show();
+  adminView.verify = function ( ctx, next ) {
+    if ( !localStorage.token ) $( '.admin' ).addClass( 'admin-only' );
+    else $( '.admin' ).show();
     next();
   }
 
   module.adminView = adminView;
-})(app)
+} )( app )
