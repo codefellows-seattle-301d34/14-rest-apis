@@ -75,14 +75,17 @@ var app = app || {};
   };
 
 // COMMENT: What is the purpose of this method?
+//This method initializes the search form when we click on the search button and saves the user input into variable to send as a query.
   bookView.initSearchFormPage = function() {
     app.showOnly('.search-view');
 
     $('#search-form').on('submit', function(event) {
       // COMMENT: What default behavior is being prevented here?
+      //Prevents the url change 
       event.preventDefault();
 
       // COMMENT: What is the event.target, below? What will happen if the user does not provide the information needed for the title, author, or isbn properties?
+      //event.target.values are the details from the form. if the user dont give the values,the values will be empty string.
       let book = {
         title: event.target.title.value || '',
         author: event.target.author.value || '',
@@ -92,6 +95,7 @@ var app = app || {};
       module.Book.find(book, bookView.initSearchResultsPage);
 
       // COMMENT: Why are these values set to an empty string?
+      // in future if the user doesnt type anything in the searchbar. it will make sure that it is empty
       event.target.title.value = '';
       event.target.author.value = '';
       event.target.isbn.value = '';
@@ -99,15 +103,18 @@ var app = app || {};
   }
 
   // COMMENT: What is the purpose of this method?
+  //This method takes result from goolge api and display them in list
   bookView.initSearchResultsPage = function() {
     app.showOnly('.search-results');
     $('#search-list').empty();
 
     // COMMENT: Explain how the .forEach() method is being used below.
+    //It is used to apply the appending toHtml to every item in the Book.all array.This will be the result our search.
     module.Book.all.forEach(book => $('#search-list').append(book.toHtml()));
     $('.detail-button a').text('Add to list').attr('href', '/');
     $('.detail-button').on('click', function(e) {
       // COMMENT: Explain the following line of code.
+      //This is applied to ad to list button. so when a user clicks one book,that book will be saved into the database.
       module.Book.findOne($(this).parent().parent().parent().data('bookid'))
     });
   }
