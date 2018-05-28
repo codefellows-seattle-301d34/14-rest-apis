@@ -17,9 +17,9 @@ var app = app || {};
   }
 
   Book.all = [];
-  
+
   Book.loadAll = rows => Book.all = rows.sort((a, b) => b.title - a.title).map(book => new Book(book));
-  
+
   Book.fetchAll = callback =>
     $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/books`)
       .then(Book.loadAll)
@@ -54,7 +54,10 @@ var app = app || {};
       .then(() => page('/'))
       .catch(errorCallback)
 
-  // COMMENT: Where is this method invoked? What is passed in as the 'book' argument when invoked? What callback will be invoked after Book.loadAll is invoked?
+  // COMMENT: Where is this method invoked?
+  // What is passed in as the 'book' argument when invoked?
+  // What callback will be invoked after Book.loadAll is invoked?
+  //It is invoked in book-veiw.js. AN object called book is passed.  bookView.initSearchResultsPage will be invoked.
   Book.find = (book, callback) =>
     $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/books/find`, book)
       .then(Book.loadAll)
@@ -62,6 +65,7 @@ var app = app || {};
       .catch(errorCallback)
 
   // COMMENT: Where is this method invoked? How does it differ from the Book.find method, above?
+  // It is invoked in book-view.js. It is different because it is only looking for one book.
   Book.findOne = isbn =>
     $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/books/find/${isbn}`)
       .then(Book.create)
