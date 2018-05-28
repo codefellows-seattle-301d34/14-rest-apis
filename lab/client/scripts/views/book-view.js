@@ -75,14 +75,17 @@ var app = app || {};
   };
 
 // COMMENT: What is the purpose of this method?
+// allows a search in google database for books and adds them
   bookView.initSearchFormPage = function() {
     app.showOnly('.search-view');
 
     $('#search-form').on('submit', function(event) {
       // COMMENT: What default behavior is being prevented here?
+      //page load is being prevented. 
       event.preventDefault();
 
       // COMMENT: What is the event.target, below? What will happen if the user does not provide the information needed for the title, author, or isbn properties?
+      //target html element with id= search-form
       let book = {
         title: event.target.title.value || '',
         author: event.target.author.value || '',
@@ -92,6 +95,7 @@ var app = app || {};
       module.Book.find(book, bookView.initSearchResultsPage);
 
       // COMMENT: Why are these values set to an empty string?
+      //this empties out previous entries, for redundancy. 
       event.target.title.value = '';
       event.target.author.value = '';
       event.target.isbn.value = '';
@@ -99,15 +103,18 @@ var app = app || {};
   }
 
   // COMMENT: What is the purpose of this method?
+  //this method shows results of user's search results
   bookView.initSearchResultsPage = function() {
     app.showOnly('.search-results');
     $('#search-list').empty();
 
     // COMMENT: Explain how the .forEach() method is being used below.
+    //the response from search is being turned into book instances and added. The forEach increments through the same array and appends them to html for visibilty. 
     module.Book.all.forEach(book => $('#search-list').append(book.toHtml()));
     $('.detail-button a').text('Add to list').attr('href', '/');
     $('.detail-button').on('click', function(e) {
       // COMMENT: Explain the following line of code.
+      //user adds an item by clicking 'add to list' this gets data from data-bookid from handlebar template. bookid is then sent as an argument to book.findone function. 
       module.Book.findOne($(this).parent().parent().parent().data('bookid'))
     });
   }
