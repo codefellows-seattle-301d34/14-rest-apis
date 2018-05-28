@@ -54,14 +54,19 @@ var app = app || {};
       .then(() => page('/'))
       .catch(errorCallback)
 
-  // COMMENT: Where is this method invoked? What is passed in as the 'book' argument when invoked? What callback will be invoked after Book.loadAll is invoked?
+  // DONE:
+  // Where is this method invoked? bookView.initSearchFormPage()
+  // What is passed in as the 'book' argument when invoked? an object literal, which gets its properties from the search form's input field's values 
+  // What callback will be invoked after Book.loadAll is invoked? whichever callback is the second paramater provided when this method is called. In this app, this callback is the bookView.initSearchResultsPage method.
   Book.find = (book, callback) =>
     $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/books/find`, book)
       .then(Book.loadAll)
       .then(callback)
       .catch(errorCallback)
 
-  // COMMENT: Where is this method invoked? How does it differ from the Book.find method, above?
+  // DONE:
+  // Where is this method invoked? bookView.initSearchResultsPage()
+  // How does it differ from the Book.find method, above? This method finds a book based on the provided isbn, instead of based on an object literal with book-properties.
   Book.findOne = isbn =>
     $.get(`${app.ENVIRONMENT.apiUrl}/api/v1/books/find/${isbn}`)
       .then(Book.create)

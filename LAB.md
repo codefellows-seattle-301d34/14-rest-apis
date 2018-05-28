@@ -17,7 +17,7 @@ Complete [today's Kata](https://www.codewars.com/kata/indexed-capitalization) an
 - [Superagent](https://visionmedia.github.io/superagent/)
 - [Book Store Wireframe](./wireframes)
 
-## Configuration
+## Configurationhttps://github.com/ashtonkellis/14-rest-apis.git
 
 - `ENV VARS` - Paste the following code snippet into your terminal window:
   * _Reminder: these will be temporary while the current shell session (window) is open_
@@ -34,7 +34,7 @@ Windows: export DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/books_app
 book_app_week_3/
 ├── book-list-client
 │   ├── data
-│   │   └── books.json
+│   │   └── books.jsonhttps://github.com/ashtonkellis/14-rest-apis.git
 |   ├── .eslintrc.json
 |   ├── .gitignore
 │   ├── index.html
